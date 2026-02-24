@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Tasks list
+{% endblock %}
+
+
+{% block content %}
+
+{{folder.title}}
+
+{% if not tasks %}
+<h1>this folder is empty</h1>
+{% endif %}
+
+{% for task in tasks %}
+
+    <h1>{{task.title}}</h1>
+    <p>{{task.description}}</p>
+    <a href="{% url 'task' task.id %}">more</a>
+{% endfor %}
+
+
+{% if folder %}
+<a href="{% url 'task_folder_update' folder.id %}">edit</a>
+<a href="{% url 'task_folder_delete' folder.id %}">delete</a>
+<a href="{% url 'task_create' folder.id %}">create task</a>
+{% endif %}
+
+{% if user.is_authenticated %}
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="logout">
+</form>
+{% else %}
+<a href="{% url 'login' %}">login</a>
+{% endif %}
+
+{% endblock %}

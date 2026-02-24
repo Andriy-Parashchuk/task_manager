@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for folder in folders %}
+  <a href="{% url 'task_list_by_folder' folder.id %}"><h1>{{folder.title}}</h1></a>
+{% endfor %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
