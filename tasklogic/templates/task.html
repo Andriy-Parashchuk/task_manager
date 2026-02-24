@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>{{task.title}}</h1>
+<p>{{task.description}}</p>
+
+<a href="{% url 'task_update' task.id %}">edit</a>
+<a href="{% url 'task_delete' task.id %}">delete</a>
+
+{% for comment in comments %}
+
+<p>{{comment.content}}</p>
+<p>{{comment.user.username}}</p>
+<p>{{comment.created_at}}</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+{% else %}
+<p>please sign in for write comments)</p>
+{% endif %}
+
+</body>
+</html>
