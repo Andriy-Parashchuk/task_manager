@@ -1,19 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+Create new task
+{% endblock %}
+
+{% block content %}
+
+
+<ol class="list-group list-group-numbered">
 {% for folder in folders %}
-  <a href="{% url 'task_list_by_folder' folder.id %}"><h1>{{folder.title}}</h1></a>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+    <div class="ms-2 me-auto">
+        <a href="{% url 'task_list_by_folder' folder.id %}">
+      <div class="fw-bold">{{folder.title}}</div>
+            </a>
+        Optional folder description
+    </div>
+    <span class="badge text-bg-primary rounded-pill">{{folder.count_tasks}}</span>
+  </li>
 {% endfor %}
 
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit">
-</form>
+</ol>
+<div class="container text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#folderCreateModal">
+        Create new folder
+    </button>
+</div>
 
-</body>
-</html>
+
+<div class="modal fade" id="folderCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Save changes">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

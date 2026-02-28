@@ -27,13 +27,4 @@ Tasks list
 <a href="{% url 'task_create' folder.id %}">create task</a>
 {% endif %}
 
-{% if user.is_authenticated %}
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="logout">
-</form>
-{% else %}
-<a href="{% url 'login' %}">login</a>
-{% endif %}
-
 {% endblock %}
