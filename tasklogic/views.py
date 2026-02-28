@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from .mixins import UserIsOwnerMixin
-
+from django.db.models import Count, Q
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView, View
@@ -107,7 +107,9 @@ class TaskFolderListView(LoginRequiredMixin, ListView):
     context_object_name = 'folders'
 
     def get_queryset(self):
-        return TaskFolder.objects.filter(user=self.request.user)
+        return TaskFolder.objects.filter(user=self.request.user)\
+            .annotate(count_tasks=Count('tasks', filter=~Q(tasks__status='d')))
+        # add annotate for count tasks and filter them by 'done' status using Q object
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

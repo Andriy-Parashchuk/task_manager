@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
+{% block title %}
+{{task.title}}
+{% endblock %}
+{% block content %}
 <h1>{{task.title}}</h1>
 <p>{{task.description}}</p>
 
@@ -29,5 +27,4 @@
 <p>please sign in for write comments)</p>
 {% endif %}
 
-</body>
-</html>
+{% endblock %}
