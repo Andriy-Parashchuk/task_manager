@@ -20,7 +20,6 @@ class TaskListView(ListView):
 
     def get_queryset(self):
         if 'pk' in self.kwargs:
-            print('yes')
             self.task_folder = get_object_or_404(TaskFolder, pk=self.kwargs['pk'])
             return Task.objects.filter(folder=self.task_folder, user=self.request.user)
         else:
@@ -33,6 +32,8 @@ class TaskListView(ListView):
         if 'pk' in self.kwargs:
             context = super().get_context_data(**kwargs)
             context['folder'] = get_object_or_404(TaskFolder, pk=self.kwargs['pk'])
+            context['folder_form'] = TaskFolderForm
+            context['task_form'] = TaskForm
             return context
         else:
             return super().get_context_data(**kwargs)

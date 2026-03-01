@@ -6,11 +6,46 @@ Tasks list
 
 
 {% block content %}
+{%if folder.title%}
+<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+    <div class="col-md-3"></div>
+    <div class="col-12 col-md-auto mb-2 justify-content-center ">
+        <h1> <span class="badge text-bg-secondary">{{folder.title}} </span></h1>
+    </div>
+    <div class=" col-md-3 text-end">
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            Options
+          </button>
+          <ul class="dropdown-menu dropdown-menu-lg-end">
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#folderEditModal" >Edit</a></li>
+            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#folderDeleteModal" >Delete folder</a></li>
+          </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
 
-{{folder.title}}
 
-{% if not tasks %}
-<h1>this folder is empty</h1>
+<div class="container">
+    <div class="text-center">
+        {% if not tasks %}
+            {% if folder.title %}
+                <h3>this folder is empty</h3>
+            {% else %}
+                <h3>You dont have any tasks</h3>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+
+{% if folder %}
+<div class="container text-center mt-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskCreateModal">
+        Create new task
+    </button>
+</div>
 {% endif %}
 
 {% for task in tasks %}
@@ -22,9 +57,63 @@ Tasks list
 
 
 {% if folder %}
-<a href="{% url 'task_folder_update' folder.id %}">edit</a>
-<a href="{% url 'task_folder_delete' folder.id %}">delete</a>
-<a href="{% url 'task_create' folder.id %}">create task</a>
-{% endif %}
+<div class="modal fade" id="folderEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit folder</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'task_folder_update' folder.id %}" method="post">
+            {% csrf_token %}
+            {{ folder_form.as_p }}
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Edit folder name">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
+
+<div class="modal fade" id="folderDeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteLabel">Delete folder</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'task_folder_delete' folder.id %}" method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ folder.title }}" folder?</p>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Delete folder">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="taskCreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel">Create task</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'task_create' folder.id %}" method="post">
+            {% csrf_token %}
+            {{ task_form.as_p }}
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Edit folder name">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
